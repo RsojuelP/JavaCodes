@@ -4,8 +4,6 @@
 package my.company.creararchivotexto;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Formatter;
 import java.util.FormatterClosedException;
 import java.util.NoSuchElementException;
@@ -18,12 +16,10 @@ import java.util.Scanner;
 public class CrearArchivoTexto {
 
     private static Formatter salida; //envia texto a un archivo
-    private static Scanner entrada;
 
     public static void main(String[] args) {
         abrirArchivo();
         agregarRegistros();
-        leerRegistros();
         cerrarArchivo();
     }
 
@@ -32,14 +28,10 @@ public class CrearArchivoTexto {
         try {
             //usamos una ruta relativa
             salida = new Formatter("clientes.txt"); //abre el archivo
-            entrada = new Scanner(Paths.get("clientes.txt"));
         } catch (SecurityException securityException) {
             System.err.println("Permiso de escritura denegado. Terminado.");
             System.exit(1);// termina el programa
         } catch (FileNotFoundException fileNotFoundException) {
-            System.err.println("Error al abrir el archivo. Terminado.");
-            System.exit(1);// termina el programa
-        } catch(IOException ioException){
             System.err.println("Error al abrir el archivo. Terminado.");
             System.exit(1);// termina el programa
         }
@@ -71,25 +63,10 @@ public class CrearArchivoTexto {
         }// fin del siclo
     }// fin del metodo agregarRegistros
 
-    public static void leerRegistros() {
-        System.out.printf("%-10s%-12s%-12s%10s%n", "Cuenta", "Primer Nombre", "Apellido", "Saldo");
-        try {
-            while (entrada.hasNext())// mientras haya mas que leer
-            {
-                System.out.printf("%-10d%-12s%-12s%10.2f%n", entrada.nextInt(), entrada.next(), entrada.next(), entrada.nextDouble());
-            }
-        } catch (NoSuchFieldError noSuchFieldError) {
-            System.err.println("El archivo no esta bien formado. terminado.");
-        } catch (IllegalStateException stateException) {
-            System.err.println("Error al leer el archivo. Terminado");
-        }
-    }// fin del metodo leerRegistros
-
     // cierra el archivo
     public static void cerrarArchivo() {
-        if (salida != null || entrada != null) {
+        if (salida != null) {
             salida.close();
-            //entrada.close();
         }
     }
 }
